@@ -37,7 +37,7 @@ public class SceneInitializationAwaiter : ISceneInitializationAwaiter, ISceneIni
     public void NotifyInitializationComplete()
     {
         Debug.Log("シーンの初期化が完了しました");
-        _tcs.TrySetResult();
+        _tcs?.TrySetResult();
     }
     
     public void NotifyInitializationFailed(Exception ex)

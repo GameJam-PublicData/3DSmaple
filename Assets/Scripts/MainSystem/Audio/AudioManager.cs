@@ -20,9 +20,11 @@ public enum AudioCategory
 
 public interface IAudioManager
 {
-    UniTask PlayBGM(string bgmKey, float fadeTime = 0f);
-    void PlaySE(string seKey, float volume = 1f);
+    UniTask PlayBGM(string bgmKey, float fadeTime = 0f,float volume = 1f);
     void StopBGM(float fadeTime = 0f);
+    void PlaySE(string seKey, float volume = 1f);
+    void PlayJingle(string jingleKey, float volume = 1f);
+   
     void SetVolume(AudioCategory category, float volume);
     float GetVolume(AudioCategory category);
 }
@@ -60,12 +62,11 @@ public class AudioManager : MonoBehaviour, IAudioManager
         return source;
     }
     
-    public async UniTask PlayBGM(string bgmKey, float fadeTime = 0f)
+    public async UniTask PlayBGM(string bgmKey, float fadeTime = 0f, float volume = 1f)
     {
         AudioClip clip = audioSO.BGMSounds.Find(s => s.SoundName == bgmKey)?.Clip;
         if (clip == null) return;
         
-        audioMixer.GetFloat("BGMVolume", out float mixerVolume);
 
         _bgmFadCTS?.Cancel();
         if (fadeTime != 0)
@@ -83,7 +84,7 @@ public class AudioManager : MonoBehaviour, IAudioManager
             }
             else
             {
-                _bgmSource.volume = mixerVolume;
+                _bgmSource.volume = volume;
                 _bgmSource.Stop();
             }
         }
@@ -93,7 +94,7 @@ public class AudioManager : MonoBehaviour, IAudioManager
             _bgmSource.volume = 0f;
             _bgmSource.clip = clip;
             _bgmSource.Play();
-            _bgmSource.DOFade(mixerVolume, fadeTime);
+            _bgmSource.DOFade(volume, fadeTime);
             await  UniTask.Delay((int)(fadeTime * 1000));
         }
         else
@@ -112,7 +113,16 @@ public class AudioManager : MonoBehaviour, IAudioManager
         AudioSource source = GetAvailable2DSource();
         source.PlayOneShot(clip, volume);
     }
-    
+
+    public void PlayJingle(string jingleKey, float volume = 1)
+    {
+        AudioClip clip = audioSO.JingleSounds.Find(s => s.SoundName == jingleKey)?.Clip;
+        if (clip == null) return;
+
+        AudioSource source = GetAvailable2DSource();
+        source.PlayOneShot(clip, volume);
+    }
+
     public void StopBGM(float fadeTime = 0f)
     {
         _bgmFadCTS?.Cancel();
@@ -131,6 +141,13 @@ public class AudioManager : MonoBehaviour, IAudioManager
     {
         string paramName = $"{category}Volume";
         audioMixer.SetFloat(paramName, VolumeToDb(volume));
+
+        switch (category)
+        {
+            case AudioCategory.BGM:
+                PlayBGM("BGMTest1").Forget();
+                break;
+        }
     }
     public float GetVolume(AudioCategory category)
     {
@@ -175,6 +192,7 @@ public class AudioManager : MonoBehaviour, IAudioManager
 
     float VolumeToDb(float volume)
     {
+        Debug.Log($"VolumeToDbの計算結果: { 20f * Mathf.Log10(volume) }");
         return volume > 0 ? 20f * Mathf.Log10(volume) : -80f;
     }
     void OnDestroy()

@@ -22,9 +22,9 @@ public class AudioSettingPanel : MonoBehaviour
     
     void Start()
     {
-        masterSlider.value = _audioManager.GetVolume(AudioCategory.Master)/100f;
-        bgmSlider.value = _audioManager.GetVolume(AudioCategory.BGM) / 100f;
-        seSlider.value = _audioManager.GetVolume(AudioCategory.SE) / 100f;
+        masterSlider.value = (_audioManager.GetVolume(AudioCategory.Master)+80) /100f;
+        bgmSlider.value = (_audioManager.GetVolume(AudioCategory.BGM)+80) / 100f;
+        seSlider.value = (_audioManager.GetVolume(AudioCategory.SE)+80) / 100f;
         
         masterSlider.onValueChanged.AddListener(OnMasterVolumeChanged);
         bgmSlider.onValueChanged.AddListener(OnBGMVolumeChanged);
@@ -35,17 +35,18 @@ public class AudioSettingPanel : MonoBehaviour
     
     void OnMasterVolumeChanged(float value)
     {
-        _audioManager.SetVolume(AudioCategory.Master, value * 100f);
+        _audioManager.SetVolume(AudioCategory.Master, value);
     }
     
     void OnBGMVolumeChanged(float value)
     {
-        _audioManager.SetVolume(AudioCategory.BGM, value * 100f);
+        _audioManager.SetVolume(AudioCategory.BGM, value);
     }
     
     void OnSEVolumeChanged(float value)
     {
-        _audioManager.SetVolume(AudioCategory.SE, value * 100f);
+        Debug.Log($"SEの音量が{value }に変更されました");
+        _audioManager.SetVolume(AudioCategory.SE,value);
     }
 }
 }

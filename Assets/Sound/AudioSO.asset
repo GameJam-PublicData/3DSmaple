@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb9995ddcf934e86b27a772e2a4bd94b, type: 3}
   m_Name: AudioSO
   m_EditorClassIdentifier: Assembly-CSharp::MainSystem.Audio.AudioSO
-  _seSounds: []
-  _bgmSounds:
+  _seSounds:
   - {fileID: 11400000, guid: 39a72bbf1ecb0456babe8f45845d93d3, type: 2}
-  _jingleSounds: []
+  _bgmSounds:
+  - {fileID: 11400000, guid: ce76128be31364762a6da825bf53ea1e, type: 2}
+  _jingleSounds:
+  - {fileID: 11400000, guid: 37549845033bd46258903ee973625a2a, type: 2}
