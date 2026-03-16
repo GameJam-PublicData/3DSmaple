@@ -1,4 +1,5 @@
 using MainSystem.CoreFlow;
+using MainSystem.Save;
 using MainSystem.Scene;
 using UnityEngine;
 using VContainer;
@@ -15,6 +16,7 @@ public class RootLifeTimeScope : LifetimeScope
         builder.Register<BootManager>(Lifetime.Singleton);
         builder.Register<ISceneLoader,SceneLoader>(Lifetime.Singleton);
         builder.Register<SceneInitializationAwaiter>(Lifetime.Singleton).AsImplementedInterfaces();
+        builder.Register<ISaveDataManager,SaveDataManager>(Lifetime.Singleton);
     }
 
     void Start()
